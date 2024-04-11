@@ -1,0 +1,31 @@
+node {
+    
+    echo "Print build number: ${env.JOB_NAME}"
+    echo "Print node number: ${env.NODE_NAME}"
+    
+    def maven_home = tool name: 'Maven3.9.6'
+    
+// Get source code from git repo
+    stage ('CheckOutCode') {
+        git branch: 'development', credentialsId: '06bc0abc-8675-45dd-91f1-333ba4e899b6', url: 'https://github.com/RKReddy1994/maven-web-application-mithun.git'
+    }
+// Do build by using maven build tool
+    stage ('Build') {
+        sh "${maven_home}/bin/mvn clean package"
+    } 
+// Execute sonar report
+    stage ('sonar scanner report') {
+        sh "${maven_home}/bin/mvn sonar:sonar"
+    } 
+// Upload Artefact to Nexus Artefact Repo
+    stage ('Artefact to nexus repo') {
+        sh "${maven_home}/bin/mvn deploy"
+    } 
+// Deploy the war artefact to Tomcat server
+    stage ('Deploy the application war to tomcat server') {
+       sshagent(['4c3aa833-739b-4e74-9673-e9ad510a4c7c']) {
+                sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.169.254:/opt/apache-tomcat-10.1.20/webapps/"
+
+}
+    }     
+}
