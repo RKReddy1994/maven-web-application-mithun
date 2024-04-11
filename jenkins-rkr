@@ -4,7 +4,9 @@ node {
     echo "Print node number: ${env.NODE_NAME}"
     
     def maven_home = tool name: 'Maven3.9.6'
-    
+
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+
 // Get source code from git repo
     stage ('CheckOutCode') {
         git branch: 'development', credentialsId: '06bc0abc-8675-45dd-91f1-333ba4e899b6', url: 'https://github.com/RKReddy1994/maven-web-application-mithun.git'
