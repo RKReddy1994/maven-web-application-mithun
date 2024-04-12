@@ -1,4 +1,4 @@
-node {
+node ('slaves'){
     
     echo "Print build number: ${env.JOB_NAME}"
     echo "Print node number: ${env.NODE_NAME}"
