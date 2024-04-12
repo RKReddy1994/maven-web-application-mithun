@@ -1,0 +1,18 @@
+pipeline{
+
+agent any
+
+parameters {
+  choice choices: ['development', 'master', 'qa', 'prod'], name: 'BranchName'
+}
+
+stages{
+
+  stage('CheckOutCode'){
+    steps{
+    git branch: "${BranchName}", credentialsId: '957b543e-6f77-4cef-9aec-82e9b0230975', url: 'https://github.com/devopstrainingblr/maven-web-application-1.git'
+	
+	}
+  }
+   }//stages closed
+}//pipeline closed
