@@ -3,6 +3,9 @@ agent any
 tools {
   maven 'Maven3.9.6'
 }
+parameters {
+  choice choices: ['development', 'master', 'qa', 'prod'], name: 'BranchName'
+}
 stages{
 
   stage('CheckOutCode'){
