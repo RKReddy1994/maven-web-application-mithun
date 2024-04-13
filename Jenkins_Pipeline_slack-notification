@@ -1,0 +1,57 @@
+@Library('slacksharedlibs') _
+pipeline{
+    agent any
+
+tools {
+  maven 'Maven3.9.6'
+}
+options {
+  timestamps()
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+}
+triggers {
+  //cron '* * * * *'
+  pollSCM '* * * * *'
+}
+    stages {
+        stage('get code from github') {
+            steps {
+                sendslacknotifications('STARTED')
+                git branch: 'development', credentialsId: '06bc0abc-8675-45dd-91f1-333ba4e899b6', url: 'https://github.com/RKReddy1994/maven-web-application-mithun.git'
+            }
+        }
+    stage('Build') {
+            steps {
+                sh "mvn clean package"
+            }
+        }
+    /*
+    stage('Execute sonar scanner report') {
+            steps {
+                sh "mvn sonar:sonar"
+            }
+        }
+    stage('Put the created artefact to nexu repo') {
+            steps {
+                sh "mvn deploy"
+            }
+        }    
+    stage('Deploy the war to tomcat server') {
+            steps {
+                sshagent(['4c3aa833-739b-4e74-9673-e9ad510a4c7c']) {
+                sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.169.254:/opt/apache-tomcat-10.1.20/webapps/"
+                }
+            }
+        } 
+    */
+    }//close stages
+    post {
+  success {
+     sendslacknotifications(currentBuild.result)
+  }
+  failure {
+       sendslacknotifications(currentBuild.result)
+  }
+}
+
+}//close pipeline
