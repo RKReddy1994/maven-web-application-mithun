@@ -26,7 +26,7 @@ node ('slaves'){
 // Deploy the war artefact to Tomcat server
     stage ('Deploy the application war to tomcat server') {
        sshagent(['4c3aa833-739b-4e74-9673-e9ad510a4c7c']) {
-                sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.169.254:/opt/apache-tomcat-10.1.20/webapps/"
+                sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.108.249.52:/opt/apache-tomcat-10.1.20/webapps/"
 }
     }     
 */
