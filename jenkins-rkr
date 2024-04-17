@@ -16,7 +16,7 @@ node ('slaves'){
         sh "${maven_home}/bin/mvn clean package"
     } 
 // Execute sonar report
-/*    stage ('sonar scanner report') {
+    stage ('sonar scanner report') {
         sh "${maven_home}/bin/mvn sonar:sonar"
     } 
 // Upload Artefact to Nexus Artefact Repo
@@ -29,5 +29,5 @@ node ('slaves'){
                 sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.108.249.52:/opt/apache-tomcat-10.1.20/webapps/"
 }
     }     
-*/
+
 }
